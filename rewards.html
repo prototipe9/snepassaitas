@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SnapGhost // Invite Rewards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="description" content="Share SnapGhost invites and earn free hacks." />
+  <meta property="og:title" content="SnapGhost // Invite Rewards" />
+  <meta property="og:description" content="Share your link, track invites, and redeem free hacks with SnapGhost." />
+  <meta property="og:image" content="https://snapghost.site/logo.png" />
+  <meta property="og:url" content="https://snapghost.site/rewards.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SnapGhost // Invite Rewards" />
+  <meta name="twitter:description" content="Share your link, track invites, and redeem free hacks with SnapGhost." />
+  <meta name="twitter:image" content="https://snapghost.site/logo.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #111827;
+      background: #000;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon img {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #f9fafb;
+      box-shadow: 0 0 12px rgba(249, 250, 251, 0.7);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-main {
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+    }
+
+    .nav-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+      border: 1px solid #111827;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #e5e7eb;
+    }
+
+    .logout-btn {
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #d1d5db;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .logout-btn:hover {
+      border-color: #f9fafb;
+      color: #000;
+      background: #f9fafb;
+      box-shadow: 0 0 16px rgba(249, 250, 251, 0.6);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+      }
+      .user-pill {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 12px;
+      }
+      .logout-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .nav-tag {
+        padding: 5px 10px;
+      }
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    .invite-card {
+      width: 100%;
+      max-width: 520px;
+      background: #020617;
+      border-radius: 20px;
+      border: 1px solid #111827;
+      box-shadow: 0 0 34px rgba(15, 23, 42, 0.9);
+      padding: 28px 26px 26px;
+      text-align: center;
+    }
+
+    .invite-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .invite-subtitle {
+      font-size: 13px;
+      color: #d1d5db;
+      margin-bottom: 20px;
+    }
+
+    /* LINK ROW */
+    .link-row {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin-bottom: 18px;
+      background: #030712;
+      border-radius: 10px;
+      padding: 6px;
+      border: 1px solid #111827;
+    }
+
+    .link-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #f9fafb;
+      font-size: 13px;
+      padding: 6px 8px;
+      outline: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #f9fafb;
+      background: transparent;
+      color: #f9fafb;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: #f9fafb;
+      color: #000;
+      box-shadow: 0 0 18px rgba(249, 250, 251, 0.7);
+      transform: translateY(-1px);
+    }
+
+    .invite-rule {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+    }
+
+    .invite-count {
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .invite-count span {
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    footer {
+      padding: 10px 22px 16px;
+      font-size: 10px;
+      color: #4b5563;
+      border-top: 1px solid #111827;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <img src="logo.jpg" alt="logo">
+    </div>
+    <div class="logo-text">
+      <span class="logo-main">SNAPGHOST</span>
+      <span class="logo-sub">ACCESS SUITE</span>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <div class="nav-tag">INVITE</div>
+    <div class="user-pill" id="userPill">
+      <span id="navUser">@unknown</span>
+      <span id="navKeys" style="color:#9ca3af;">Keys: 0</span>
+      <span id="navInvites" style="color:#9ca3af;">Invites: 0</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn" style="display:none;">Logout</button>
+  </div>
+</header>
+
+<main>
+  <div class="invite-card">
+    <h1 class="invite-title">Invite Rewards</h1>
+    <p class="invite-subtitle">
+      Fake invites will be detected and your account will get locked.
+      <br><br><strong>Your Invite Link:</strong>
+    </p>
+
+    <div class="link-row">
+      <input
+        id="inviteLink"
+        class="link-input"
+        type="text"
+        readonly
+      />
+      <button id="copyBtn" class="copy-btn">Copy</button>
+    </div>
+
+    <p class="invite-rule"><strong>15 Invites = 1 Free Hack</strong></p>
+    <p class="invite-count">Your Current Invites = <span id="inviteCount">0</span></p>
+  </div>
+</main>
+
+<footer>
+  <span>© 2025 SnapGhost Suite.</span>
+  <span>Invite Rewards Panel.</span>
+</footer>
+
+<script>
+  window.SNAP_API_BASE = "https://api.snapghost.site";
+</script>
+<script src="auth.js"></script>
+<script>
+  const copyBtn = document.getElementById("copyBtn");
+  const inviteInput = document.getElementById("inviteLink");
+  const inviteCount = document.getElementById("inviteCount");
+  const navUser = document.getElementById("navUser");
+  const navKeys = document.getElementById("navKeys");
+  const navInvites = document.getElementById("navInvites");
+  const userPill = document.getElementById("userPill");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  let currentInviteLink = "";
+
+  function normalizeInviteLink(link) {
+    if (!link) return "";
+    if (link.startsWith("//")) return `https:${link}`;
+    if (link.startsWith("/")) return `https://${window.location.host}${link}`;
+    if (/^https?:\/\//i.test(link)) {
+      return link.replace(/^http:\/\//i, "https://");
+    }
+    return `https://${link}`;
+  }
+
+  function updateNav(user) {
+    if (user) {
+      navUser.textContent = "@" + user.username;
+      navKeys.textContent = "Keys: " + (user.hack_keys_used || 0);
+      navInvites.textContent = "Invites: " + (user.invites_count || 0);
+      userPill.style.borderColor = "#f9fafb";
+      logoutBtn.style.display = "inline-flex";
+    } else {
+      navUser.textContent = "Login required";
+      navKeys.textContent = "";
+      navInvites.textContent = "";
+      userPill.style.borderColor = "#111827";
+      logoutBtn.style.display = "none";
+    }
+  }
+
+  logoutBtn.addEventListener("click", () => snapAuth.logout());
+
+  async function loadInvites() {
+    try {
+      const res = await snapAuth.apiFetch("/api/invites");
+      if (!res.ok) throw new Error("auth");
+      const data = await res.json();
+      const httpsLink = normalizeInviteLink(data.inviteLink);
+      currentInviteLink = httpsLink;
+      inviteInput.value = httpsLink;
+      inviteCount.textContent = data.invites || 0;
+    } catch (err) {
+      inviteInput.value = "Login to see your invite link";
+      inviteCount.textContent = "0";
+      currentInviteLink = "";
+    }
+  }
+
+  copyBtn.addEventListener("click", async () => {
+    const text = inviteInput.value;
+    if (!text || text.startsWith("Login")) return;
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        inviteInput.select();
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+      }
+
+      const original = copyBtn.textContent;
+      copyBtn.textContent = "Copied";
+      setTimeout(() => {
+        copyBtn.textContent = original;
+      }, 1500);
+    } catch (e) {
+      console.error(e);
+    }
+  });
+
+  snapAuth.onUser(user => {
+    updateNav(user);
+    if (user) {
+      loadInvites();
+    } else {
+      inviteInput.value = "Login to see your invite link";
+      inviteCount.textContent = "0";
+      currentInviteLink = "";
+    }
+  });
+
+  snapAuth.init(user => {
+    if (user) {
+      loadInvites();
+    }
+  });
+</script>
+
+</body>
+</html>
