@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SnapGhost // Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="description" content="SnapGhost Panel with invite rewards and Hack-Key gating." />
+  <meta property="og:title" content="SnapGhost // Home" />
+  <meta property="og:description" content="Panel with live recon, key gating, and invite-to-earn free hacks." />
+  <meta property="og:image" content="https://snapghost.site/logo.png" />
+  <meta property="og:url" content="https://snapghost.site/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SnapGhost // Home" />
+  <meta name="twitter:description" content="Panel with live recon, key gating, and invite-to-earn free hacks." />
+  <meta name="twitter:image" content="https://snapghost.site/logo.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #111827;
+      background: #000;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon img {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #f9fafb;
+      box-shadow: 0 0 12px rgba(249, 250, 251, 0.7);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-main {
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+    }
+
+    .nav-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+      border: 1px solid #111827;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #e5e7eb;
+    }
+
+    .logout-btn {
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #d1d5db;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .logout-btn:hover {
+      border-color: #f9fafb;
+      color: #000;
+      background: #f9fafb;
+      box-shadow: 0 0 16px rgba(249, 250, 251, 0.6);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+      }
+      .user-pill {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 12px;
+      }
+      .logout-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .nav-tag {
+        padding: 5px 10px;
+      }
+    }
+
+    main {
+      flex: 1;
+      padding: 48px 22px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .content {
+      width: 100%;
+      max-width: 1150px;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 5vw, 46px);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .hero-tagline {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #e5e7eb;
+    }
+
+    .hero-subtitle {
+      max-width: 650px;
+      margin: 0 auto 28px;
+      color: #9ca3af;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* BUTTONS */
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 13px;
+      background: transparent;
+      color: #f9fafb;
+      border: 1px solid #f9fafb; /* all buttons same border */
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      transition: .15s ease;
+    }
+
+    .btn:hover {
+      border-color: #f9fafb;
+      color: #000;
+      background: #f9fafb;
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+    }
+
+    .btn-green {
+      border-color: #22c55e;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.08);
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-green:hover {
+      border-color: #22c55e;
+      color: #052e16;
+      background: #22c55e;
+      box-shadow: 0 0 22px rgba(34, 197, 94, 0.55);
+    }
+
+    /* SNAPKRAKEN CREDIT CARD */
+    .credit-card {
+      margin-top: 24px;
+      margin-bottom: 10px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 1px solid #111827;
+      background: #020617;
+      box-shadow: 0 0 25px rgba(15, 23, 42, 0.8);
+      text-align: left;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .credit-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .credit-text {
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .credit-text a {
+      color: #f9fafb;
+      text-decoration: none;
+      border-bottom: 1px solid #f9fafb;
+    }
+
+    .credit-text a:hover {
+      opacity: 0.75;
+    }
+
+    /* FEATURE CARDS */
+    .features-row {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    @media (max-width: 900px) {
+      .features-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      padding: 26px 20px;
+      border-radius: 18px;
+      border: 1px solid #111827;
+      background: #020617;
+      box-shadow: 0 0 25px rgba(15, 23, 42, 0.8);
+      text-align: center;
+    }
+
+    .feature-icon {
+      margin-bottom: 10px;
+    }
+    .feature-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #f9fafb;
+    }
+
+    .feature-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d1d5db;
+    }
+
+    footer {
+      padding: 10px 22px 16px;
+      font-size: 10px;
+      color: #4b5563;
+      border-top: 1px solid #111827;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <img src="logo.jpg" alt="logo">
+    </div>
+    <div class="logo-text">
+      <span class="logo-main">SNAPGHOST</span>
+      <span class="logo-sub">ACCESS SUITE</span>
+    </div>
+  </div>
+  <div class="nav-actions">
+    <div class="nav-tag">HOME</div>
+    <div class="user-pill" id="userPill">
+      <span id="navUser">@unknown</span>
+      <span id="navKeys" style="color:#9ca3af;">Keys: 0</span>
+      <span id="navInvites" style="color:#9ca3af;">Invites: 0</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn" style="display:none;">Logout</button>
+  </div>
+</header>
+
+<main>
+  <div class="content">
+
+    <h1 class="hero-title">SnapGhost</h1>
+    <div class="hero-tagline">#1 Snap Tool</div>
+
+    <p class="hero-subtitle">
+      SnapGhost is a compact access suite built around key-gated panels and a tight console flow.
+      Initialize a session, route it into the Panel, and keep everything behind a single Hack-Key layer.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="access.html" class="btn">Panel</a>
+      <a href="https://snapghost.store/" class="btn btn-green">Buy Hack-Key</a>
+      <a href="https://t.me/zorvom" class="btn">Support</a>
+      <a href="rewards.html" class="btn">Invite &amp; Earn</a>
+    </div>
+
+    <!-- Trust + how-it-works -->
+    <section class="credit-card">
+      <div class="credit-title">HOW SNAPGHOST RUNS</div>
+      <p class="credit-text" style="margin-bottom:10px;">
+        The panel is gated behind your Hack-Key and live recon. Every session shows what’s happening in the log —
+        no hidden steps, no surprises. Recon pulls public-facing data, then the key challenge locks access down.
+      </p>
+      <p class="credit-text">
+        SnapGhost keeps the flow tight: secure session, recon digest, key gate, done. If you see it in the log,
+        it’s happening — if not, it’s not. Stay sharp and keep your keys clean.
+      </p>
+    </section>
+
+    <section class="features-row">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7h11v10H3z" />
+            <path d="M14 10h3.8l2.2 3v4H14V10z" />
+            <circle cx="6.5" cy="17" r="1.6" />
+            <circle cx="16.5" cy="17" r="1.6" />
+            <path d="M14 12h3" />
+          </svg>
+        </div>
+        <div class="feature-title">Instant Delivery</div>
+        <p class="feature-text">Type a user, fire the panel, and watch the checks run instantly.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            <path d="M12 14v2" />
+          </svg>
+        </div>
+        <div class="feature-title">Key Controlled</div>
+        <p class="feature-text">Everything routes through your Hack-Key layer for clean flow.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="8.5" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+        </div>
+        <div class="feature-title">Always Online</div>
+        <p class="feature-text">Run sessions any time — reset, retry, and push new checks instantly.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z" />
+            <path d="M12 12.5 4 8" />
+            <path d="M12 12.5 20 8" />
+            <path d="M12 21v-8.5" />
+          </svg>
+        </div>
+        <div class="feature-title">Expandable Flow</div>
+        <p class="feature-text">Add extra pages and routes to match whatever setup you want.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <span>© 2025 SnapGhost Suite.</span>
+  <span>Panel • Key Flow</span>
+</footer>
+
+<script>
+  window.SNAP_API_BASE = "https://api.snapghost.site";
+</script>
+<script src="auth.js"></script>
+<script>
+  const navUser = document.getElementById("navUser");
+  const navKeys = document.getElementById("navKeys");
+  const navInvites = document.getElementById("navInvites");
+  const userPill = document.getElementById("userPill");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  snapAuth.onUser(user => {
+    if (user) {
+      navUser.textContent = "@" + user.username;
+      navKeys.textContent = "Keys: " + (user.hack_keys_used || 0);
+      navInvites.textContent = "Invites: " + (user.invites_count || 0);
+      userPill.style.borderColor = "#f9fafb";
+      logoutBtn.style.display = "inline-flex";
+    } else {
+      navUser.textContent = "Login required";
+      navKeys.textContent = "";
+      navInvites.textContent = "";
+      userPill.style.borderColor = "#111827";
+      logoutBtn.style.display = "none";
+    }
+  });
+
+  snapAuth.init();
+  logoutBtn.addEventListener("click", () => {
+    snapAuth.logout();
+  });
+</script>
+</body>
+</html>

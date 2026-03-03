@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SnapGhost // Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="description" content="SnapGhost Panel with live recon, key gating, and invite rewards." />
+  <meta property="og:title" content="SnapGhost // Panel" />
+  <meta property="og:description" content="Run SnapGhost recon, key challenges, and track hack-key usage." />
+  <meta property="og:image" content="https://snapghost.site/logo.png" />
+  <meta property="og:url" content="https://snapghost.site/access.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SnapGhost // Panel" />
+  <meta name="twitter:description" content="Run SnapGhost recon, key challenges, and track hack-key usage." />
+  <meta name="twitter:image" content="https://snapghost.site/logo.png" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #f9fafb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #111827;
+      background: rgba(0, 0, 0, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #f9fafb;
+      box-shadow: 0 0 18px rgba(249, 250, 251, 0.7);
+    }
+
+    .logo-icon span {
+      font-size: 20px;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .logo-main {
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+    }
+
+    .tag {
+      border-radius: 999px;
+      border: 1px solid #111827;
+      padding: 5px 12px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: #e5e7eb;
+    }
+
+    .logout-btn {
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #d1d5db;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .logout-btn:hover {
+      border-color: #f9fafb;
+      color: #000;
+      background: #f9fafb;
+      box-shadow: 0 0 16px rgba(249, 250, 251, 0.6);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .nav-actions {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+      }
+      .user-pill {
+        width: 100%;
+        justify-content: space-between;
+        padding: 8px 12px;
+      }
+      .logout-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .tag {
+        padding: 5px 10px;
+      }
+    }
+
+    main {
+      flex: 1;
+      padding: 26px 22px 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .panel {
+      border-radius: 18px;
+      border: 1px solid #111827;
+      background: radial-gradient(circle at top left, #020617 0, #000 55%);
+      box-shadow: 0 0 40px rgba(15, 23, 42, 0.9);
+      padding: 16px 16px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(249, 250, 251, 0.06), transparent 60%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .panel-title {
+      text-transform: uppercase;
+      letter-spacing: 0.20em;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
+    }
+
+    .status-text {
+      font-size: 11px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .headline {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .muted {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      max-width: 420px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    input {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 9px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #f9fafb;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input::placeholder {
+      color: #4b5563;
+    }
+
+    input:focus {
+      border-color: #f9fafb;
+      box-shadow: 0 0 0 1px #f9fafb;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 12px;
+      border: 1px solid #f9fafb;
+      background: #000;
+      color: #f9fafb;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .btn:hover {
+      background: #f9fafb;
+      color: #000;
+      box-shadow: 0 0 24px rgba(249, 250, 251, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      border-color: #4b5563;
+      color: #d1d5db;
+      background: #020617;
+    }
+
+    .btn-secondary:hover {
+      border-color: #f9fafb;
+    }
+
+    .key-bank {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid #111827;
+      background: #020617;
+      padding: 10px;
+    }
+
+    .key-bank-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .key-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+    }
+
+    .key-chip {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background: #0b1224;
+      color: #e5e7eb;
+      font-size: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: border 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .key-chip:hover {
+      border-color: #f9fafb;
+      box-shadow: 0 0 18px rgba(249, 250, 251, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .key-chip strong {
+      display: block;
+      letter-spacing: 0.16em;
+      font-size: 11px;
+    }
+
+    .key-chip span {
+      display: block;
+      color: #9ca3af;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .terminal {
+      margin-top: 10px;
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      padding: 10px;
+      height: 280px;
+      overflow-y: auto;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    .terminal::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .terminal::-webkit-scrollbar-thumb {
+      background: #111827;
+      border-radius: 999px;
+    }
+
+    .line-prefix {
+      color: #9ca3af;
+    }
+
+    .line-info {
+      color: #e5e7eb;
+    }
+
+    .line-warn {
+      color: #facc15;
+    }
+
+    .line-error {
+      color: #f87171;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat-box {
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background: #020617;
+      padding: 10px;
+      font-size: 11px;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .stat-muted {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .profile-card {
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1px solid #111827;
+      background: #020617;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .profile-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid #1f2937;
+      background: #0b1224;
+    }
+
+    .profile-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .profile-meta strong {
+      font-size: 13px;
+      letter-spacing: 0.05em;
+    }
+
+    .profile-flags {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .profile-flag {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      background: #0b1224;
+    }
+
+    .error-banner {
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid #7f1d1d;
+      background: #111827;
+      padding: 8px 10px;
+      font-size: 11px;
+      color: #fecaca;
+      display: none;
+    }
+
+    .error-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #ef4444;
+      margin-right: 6px;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+    }
+
+    .operation-box {
+      margin-top: 14px;
+      border-radius: 12px;
+      border: 1px solid #111827;
+      background: #020617;
+      padding: 12px;
+    }
+
+    .op-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .op-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #0b1224;
+      border: 1px solid #111827;
+      font-size: 12px;
+      color: #e5e7eb;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .timer {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #f9fafb;
+    }
+
+    .credential-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+    }
+
+    .credential {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #111827;
+      background: #0b1224;
+      font-size: 13px;
+      color: #e5e7eb;
+    }
+
+    .credential small {
+      display: block;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    footer {
+      padding: 10px 22px 16px;
+      border-top: 1px solid #111827;
+      font-size: 10px;
+      color: #4b5563;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo" style="gap:12px;">
+    <div class="logo-icon" style="
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  ">
+    <img src="logo.jpg" alt="Logo" style="
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #f9fafb;
+      box-shadow: 0 0 18px rgba(249, 250, 251, 0.7);
+    ">
+  </div>
+
+      <div class="logo-text">
+        <span class="logo-main">SNAPGHOST</span>
+        <span class="logo-sub">Panel</span>
+      </div>
+  </div>
+    <div class="nav-actions">
+      <div class="nav">
+        <span class="tag">SECURED CONSOLE</span>
+      </div>
+      <div class="user-pill" id="userPill">
+        <span id="navUser">@unknown</span>
+        <span id="navKeys" style="color:#9ca3af;">Keys: 0</span>
+        <span id="navInvites" style="color:#9ca3af;">Invites: 0</span>
+      </div>
+      <button class="logout-btn" id="logoutBtn" style="display:none;">Logout</button>
+    </div>
+  </header>
+
+<main>
+  <!-- LEFT: ACCESS FLOW -->
+  <section class="panel">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-title">STEP 01 // USER SESSION</span>
+        <div class="status">
+          <span class="status-dot"></span>
+          <span class="status-text" id="statusLabel">IDLE</span>
+        </div>
+      </div>
+
+      <div class="section-label">Access</div>
+      <div class="headline">Initialize SnapGhost console.</div>
+      <p class="muted">
+        Enter a username to request console access. The system will run
+        layered checks and then issue a Hack-Key challenge.
+      </p>
+
+      <div id="usernameSection">
+        <div class="form-group">
+          <label for="usernameInput">Username</label>
+          <input
+            id="usernameInput"
+            type="text"
+            placeholder="@user"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="controls-row">
+          <button class="btn" id="btnBegin">
+            Begin Session
+          </button>
+          <button class="btn btn-secondary" id="btnReset">
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div id="keySection" style="display:none; margin-top: 10px;">
+        <div class="section-label">Step 02 // Hack-Key</div>
+        <p class="muted" style="margin-bottom: 8px;">
+          Session challenge issued. Provide an active Hack-Key to continue the
+          chain.
+        </p>
+
+        <div class="form-group">
+          <label for="keyInput">Hack-Key</label>
+          <input
+            id="keyInput"
+            type="password"
+            placeholder="••••-••••-••••"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="controls-row">
+          <button class="btn" id="btnSubmitKey">
+            Verify Key
+          </button>
+          <button class="btn btn-secondary" id="btnClearKey">
+            Clear
+          </button>
+        </div>
+
+        <div class="error-banner" id="errorBanner">
+          <span class="error-dot"></span>
+          <span id="errorText">
+            There was an error with the key. Signature mismatch detected.
+          </span>
+        </div>
+
+        <div style="margin-top: 12px;">
+          <button class="btn" id="btnBuyKey">
+            Buy Hack-Key
+          </button>
+          <button class="btn btn-secondary" id="btnInvite">
+            Invite &amp; Earn
+          </button>
+          <div style="font-size:11px;color:#9ca3af;margin-top:8px;">
+            Earn free hacks by inviting people.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: TERMINAL + STATS -->
+  <section class="panel">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-title">SESSION LOG // SNAPGHOST</span>
+        <span style="font-size:11px;color:#9ca3af;">CLIENT: <span id="clientLabel">@none</span></span>
+      </div>
+
+      <div class="terminal" id="terminal">
+        <div><span class="line-prefix">[snapghost]</span> <span class="line-info">v1.3.9 loaded.</span></div>
+        <div><span class="line-prefix">[snapghost]</span> <span class="line-info">waiting for username…</span></div>
+        <br />
+      </div>
+
+      <div class="profile-card" id="profileCard" style="display:none;">
+        <img id="profileImg" class="profile-img" src="" alt="bitmoji">
+        <div class="profile-meta">
+          <strong id="profileName">--</strong>
+          <span id="profileHandle" style="color:#9ca3af;">--</span>
+          <span id="profileStatus" style="color:#22c55e;">recon complete</span>
+          <div class="profile-flags">
+            <div class="profile-flag" id="flagEyes">My Eyes Only: --</div>
+            <div class="profile-flag" id="flagPhotos">Photos: --</div>
+            <div class="profile-flag" id="flagVideos">Videos: --</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-label">Checks</div>
+          <div class="stat-value" id="statChecks">0</div>
+          <div class="stat-muted">auth layers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Packets</div>
+          <div class="stat-value" id="statPackets">0</div>
+          <div class="stat-muted">traffic units</div>
+        </div>
+      </div>
+
+      <div class="operation-box">
+        <div class="op-top">
+          <div>
+            <div class="section-label" style="margin-bottom:4px;">Active operation</div>
+            <div class="op-pill" id="activeKey">No key</div>
+          </div>
+          <div>
+            <div class="section-label" style="margin-bottom:4px;">ETA</div>
+            <div class="timer" id="etaClock">--:--</div>
+          </div>
+        </div>
+        <div class="credential-grid">
+          <div class="credential">
+            <small>Password</small>
+            <span id="passwordValue">--</span>
+          </div>
+          <div class="credential">
+            <small>My Eyes Only</small>
+            <span id="eyesCodeValue">--</span>
+          </div>
+          <div class="credential">
+            <small>2-Factor Authenticator</small>
+            <span id="twoFactorStatus" style="color:#6b7280;">--</span>
+          </div>
+          <div class="credential">
+            <small>Mega.io Link</small>
+            <a id="megaLink" href="#" target="_blank" rel="noopener" style="color:#9ca3af;text-decoration:none;">...</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2025 SnapGhost Console.</span>
+  <span>Restricted access panel.</span>
+</footer>
+
+<script>
+  window.SNAP_API_BASE = "https://api.snapghost.site";
+</script>
+<script src="auth.js"></script>
+<script>
+  const terminal = document.getElementById("terminal");
+  const btnBegin = document.getElementById("btnBegin");
+  const btnReset = document.getElementById("btnReset");
+  const btnSubmitKey = document.getElementById("btnSubmitKey");
+  const btnClearKey = document.getElementById("btnClearKey");
+  const btnBuyKey = document.getElementById("btnBuyKey");
+  const btnInvite = document.getElementById("btnInvite");
+
+  const usernameInput = document.getElementById("usernameInput");
+  const keyInput = document.getElementById("keyInput");
+
+  const usernameSection = document.getElementById("usernameSection");
+  const keySection = document.getElementById("keySection");
+  const errorBanner = document.getElementById("errorBanner");
+
+  const statusLabel = document.getElementById("statusLabel");
+  const clientLabel = document.getElementById("clientLabel");
+
+  const statChecks = document.getElementById("statChecks");
+  const statPackets = document.getElementById("statPackets");
+
+  const navUser = document.getElementById("navUser");
+  const navKeys = document.getElementById("navKeys");
+  const navInvites = document.getElementById("navInvites");
+  const userPill = document.getElementById("userPill");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const profileCard = document.getElementById("profileCard");
+  const profileImg = document.getElementById("profileImg");
+  const profileName = document.getElementById("profileName");
+  const profileHandle = document.getElementById("profileHandle");
+  const profileStatus = document.getElementById("profileStatus");
+  const flagEyes = document.getElementById("flagEyes");
+  const flagPhotos = document.getElementById("flagPhotos");
+  const flagVideos = document.getElementById("flagVideos");
+
+  const activeKey = document.getElementById("activeKey");
+  const etaClock = document.getElementById("etaClock");
+  const passwordValue = document.getElementById("passwordValue");
+  const eyesCodeValue = document.getElementById("eyesCodeValue");
+  const twoFactorStatus = document.getElementById("twoFactorStatus");
+  const megaLink = document.getElementById("megaLink");
+
+  const hackKeyInventory = [
+    { display: "7KQM-9ZTR-X8P4", note: "core bypass", region: "Proxy-USA" },
+    { display: "T1V9-Q6PA-H4ZB", note: "priority lane", region: "Proxy-USA" },
+    { display: "W8RC-5L2N-J7QX", note: "vip injected", region: "Proxy-USA" },
+    { display: "Z3HF-P8D1-V6KM", note: "ops reserved", region: "Proxy-USA" },
+    { display: "Q9LX-2S7G-B4RT", note: "staff test", region: "Proxy-USA" }
+  ];
+  // Hard-coded list of previously used/burned keys (blocked forever)
+  const usedKeyRegistry = [
+    "7KQM-9ZTR-X8P4",
+    "9KQW-PZ7R-T8M4",
+    "M4R5-N8PL-Q2ZX"
+  ];
+
+  const hackLogPool = [
+    "routing snap-map telemetry nodes…",
+    "bruteforcing token entropy packets…",
+    "shadow-copying chats buffer…",
+    "opening memories vault descriptor…",
+    "rebuilding friend graph edges…",
+    "extracting My Eyes Only store…",
+    "decrypting device backups…",
+    "siphoning camera roll delta…",
+    "scraping story cache shards…",
+    "replaying session cookies…",
+    "injecting ghost worker sockets…",
+    "packing credential bundle…",
+    "escalating privilege tokens…",
+    "bypassing rate-limiters…",
+    "validating 2FA authenticator…",
+    "probing data center firewalls…",
+    "cloaking IP signatures…",
+    "masking geo-location data…",
+    "tunneling through proxy layers…",
+    "obfuscating traffic patterns…",
+    "rerouting via TOR nodes…",
+    "synchronizing time offsets…",
+    "compressing data stream…",
+    "finalizing payload…",
+    "retrying failed packets…",
+  ];
+
+  const TARGET_REAL_DURATION_MS = 7 * 60 * 1000;
+  const TIMER_PULSE_MIN_MULT = 0.9;
+  const TIMER_PULSE_MAX_MULT = 1.25;
+  const TIMER_PULSE_DELAY_MIN = 12000;
+  const TIMER_PULSE_DELAY_MAX = 26000;
+  const TIMER_PULSE_DURATION_MIN = 4000;
+  const TIMER_PULSE_DURATION_MAX = 9000;
+  const TIMER_WOBBLE_MAX = 9000; // +/- 6s wiggle on display
+
+  let checks = 0;
+  let packets = 0;
+  let running = false;
+  let sequenceTimeouts = [];
+  let currentUser = null;
+  let logInterval = null;
+  let countdownInterval = null;
+  let operationTimeout = null;
+  let timerPulseTimeout = null;
+  let timerPulseEndTimeout = null;
+  let timerSpeed = 1;
+  let timerBaseSpeed = 1;
+  let elapsedVirtualMs = 0;
+  let timerLastTick = 0;
+  let activeKeyEntry = null;
+  const usedKeys = new Set();
+  const MEGA_LINK = "https://mega.nz/folder/tzIGHJxI#rQIpsvPSNeIt8rtUTwGo_v";
+
+  function normalizeKey(str) {
+    return str.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+  }
+
+  function updateNav(user) {
+    if (user) {
+      navUser.textContent = "@" + user.username;
+      navKeys.textContent = "Keys: " + (user.hack_keys_used || 0);
+      navInvites.textContent = "Invites: " + (user.invites_count || 0);
+      userPill.style.borderColor = "#f9fafb";
+      logoutBtn.style.display = "inline-flex";
+    } else {
+      navUser.textContent = "Login required";
+      navKeys.textContent = "";
+      navInvites.textContent = "";
+      userPill.style.borderColor = "#111827";
+      logoutBtn.style.display = "none";
+    }
+  }
+
+  logoutBtn.addEventListener("click", () => snapAuth.logout());
+
+  function clearTimeoutsList() {
+    sequenceTimeouts.forEach(t => clearTimeout(t));
+    sequenceTimeouts = [];
+  }
+
+  function clearLiveIntervals() {
+    if (logInterval) clearInterval(logInterval);
+    if (countdownInterval) clearInterval(countdownInterval);
+    if (operationTimeout) clearTimeout(operationTimeout);
+    if (timerPulseTimeout) clearTimeout(timerPulseTimeout);
+    if (timerPulseEndTimeout) clearTimeout(timerPulseEndTimeout);
+    logInterval = null;
+    countdownInterval = null;
+    operationTimeout = null;
+    timerPulseTimeout = null;
+    timerPulseEndTimeout = null;
+    timerBaseSpeed = 1;
+    timerSpeed = timerBaseSpeed;
+    elapsedVirtualMs = 0;
+    timerLastTick = 0;
+  }
+
+  function appendLine(text, type = "info") {
+    const line = document.createElement("div");
+    let cls = "line-info";
+    if (type === "warn") cls = "line-warn";
+    if (type === "error") cls = "line-error";
+
+    line.innerHTML =
+      '<span class="line-prefix">[snapghost]</span> ' +
+      `<span class="${cls}">${text}</span>`;
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
+
+    checks += 1;
+    packets += Math.floor(Math.random() * 30) + 10;
+    statChecks.textContent = checks;
+    statPackets.textContent = packets;
+  }
+
+  function resetAll() {
+    clearTimeoutsList();
+    clearLiveIntervals();
+    running = false;
+    statusLabel.textContent = "IDLE";
+    usernameInput.value = "";
+    keyInput.value = "";
+    keySection.style.display = "none";
+    errorBanner.style.display = "none";
+    usernameSection.style.opacity = "1";
+    usernameSection.style.pointerEvents = "auto";
+    btnBegin.disabled = false;
+
+    clientLabel.textContent = "@none";
+    checks = 0;
+    packets = 0;
+    statChecks.textContent = "0";
+    statPackets.textContent = "0";
+    activeKeyEntry = null;
+    activeKey.textContent = "No key";
+    etaClock.textContent = "--:--";
+    passwordValue.textContent = "--";
+    eyesCodeValue.textContent = "--";
+    twoFactorStatus.textContent = "Pending";
+    twoFactorStatus.style.color = "#9ca3af";
+    megaLink.href = "#";
+    megaLink.style.visibility = "hidden";
+    megaLink.textContent = "...";
+    profileCard.style.display = "none";
+    flagEyes.textContent = "My Eyes Only: --";
+    flagPhotos.textContent = "Photos: --";
+    flagVideos.textContent = "Videos: --";
+
+    terminal.innerHTML =
+      '<div><span class="line-prefix">[snapghost]</span> <span class="line-info">v1.3.9 loaded.</span></div>' +
+      '<div><span class="line-prefix">[snapghost]</span> <span class="line-info">waiting for username…</span></div><br />';
+  }
+
+  function runSteps(steps, onDone, endStatus) {
+    running = true;
+    let delayAcc = 0;
+
+    steps.forEach(step => {
+      const gap = (step.delay || 0) + (1000 + Math.random() * 2000); // 1-3s pauses
+      delayAcc += gap;
+      const t = setTimeout(() => {
+        appendLine(step.text, step.type || "info");
+      }, delayAcc);
+      sequenceTimeouts.push(t);
+    });
+
+    const endTimeout = setTimeout(() => {
+      running = false;
+      if (endStatus) statusLabel.textContent = endStatus;
+      if (onDone) onDone();
+    }, delayAcc + 200);
+    sequenceTimeouts.push(endTimeout);
+  }
+
+  function formatClock(ms) {
+    const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  // Hard-coded bundle password shown when operation completes.
+  // Change this value to rotate the displayed password in the panel.
+  const PANEL_PASSWORD = "@shadow1234";
+
+  function generatePassword() {
+    return PANEL_PASSWORD;
+  }
+
+  function generateEyesCode() {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+  }
+
+  function startOperation(entry) {
+    clearTimeoutsList();
+    clearLiveIntervals();
+    running = true;
+    statusLabel.textContent = "ACTIVE";
+    errorBanner.style.display = "none";
+    activeKeyEntry = entry;
+    activeKey.textContent = `${entry.display} · ${entry.region}`;
+    profileStatus.textContent = "breach running…";
+
+    const minuteBudget = 14 + Math.floor(Math.random() * 7);
+    const virtualTotalMs = minuteBudget * 60 * 1000;
+    elapsedVirtualMs = 0;
+    timerBaseSpeed = virtualTotalMs / TARGET_REAL_DURATION_MS;
+    timerSpeed = timerBaseSpeed;
+    timerLastTick = Date.now();
+    etaClock.textContent = formatClock(virtualTotalMs);
+    megaLink.href = MEGA_LINK;
+    megaLink.style.visibility = "hidden";
+    twoFactorStatus.textContent = "Pending";
+    twoFactorStatus.style.color = "#9ca3af";
+
+    appendLine(`Hack-Key ${entry.display} accepted. channel opened for ${clientLabel.textContent}.`);
+    appendLine(`runtime ETA ~${minuteBudget}m. streaming packets…`);
+
+    logInterval = setInterval(() => {
+      const line = hackLogPool[Math.floor(Math.random() * hackLogPool.length)];
+      appendLine(line);
+    }, 900 + Math.random() * 600);
+
+    function scheduleSpeedPulse() {
+      timerPulseTimeout =
+        setTimeout(() => {
+          timerSpeed =
+            timerBaseSpeed *
+            (TIMER_PULSE_MIN_MULT +
+              Math.random() * (TIMER_PULSE_MAX_MULT - TIMER_PULSE_MIN_MULT));
+          const pulseDuration =
+            TIMER_PULSE_DURATION_MIN +
+            Math.random() *
+              (TIMER_PULSE_DURATION_MAX - TIMER_PULSE_DURATION_MIN);
+          timerPulseEndTimeout = setTimeout(() => {
+            timerSpeed = timerBaseSpeed;
+            scheduleSpeedPulse();
+          }, pulseDuration);
+        },
+        TIMER_PULSE_DELAY_MIN +
+          Math.random() * (TIMER_PULSE_DELAY_MAX - TIMER_PULSE_DELAY_MIN));
+    }
+    scheduleSpeedPulse();
+
+    let finished = false;
+    function completeOperation() {
+      if (finished) return;
+      finished = true;
+      clearLiveIntervals();
+      running = false;
+      statusLabel.textContent = "COMPLETE";
+      etaClock.textContent = "00:00";
+      profileStatus.textContent = "breach complete";
+      const password = generatePassword();
+      const eyesCode = generateEyesCode();
+      appendLine("credential bundle decrypted.");
+      appendLine(`password: ${password}`);
+      appendLine(`my eyes only code: ${eyesCode}`);
+      passwordValue.textContent = password;
+      eyesCodeValue.textContent = eyesCode;
+      flagEyes.textContent = "My Eyes Only code: " + eyesCode;
+      flagPhotos.textContent = "Photos: 968 synced";
+      flagVideos.textContent = "Videos: 192 synced";
+      appendLine("operation done. output available above.");
+      megaLink.style.visibility = "visible";
+      const masked = MEGA_LINK.slice(0, MEGA_LINK.length - 18) + "...";
+      megaLink.textContent = masked;
+      twoFactorStatus.textContent = "DISABLED";
+      twoFactorStatus.style.color = "#22c55e";
+    }
+
+    countdownInterval = setInterval(() => {
+      const now = Date.now();
+      const delta = now - timerLastTick;
+      timerLastTick = now;
+      elapsedVirtualMs += delta * timerSpeed;
+      const remaining = Math.max(0, virtualTotalMs - elapsedVirtualMs);
+      const wobble =
+        Math.random() < 0.25
+          ? (Math.random() - 0.5) * TIMER_WOBBLE_MAX
+          : 0;
+      const displayRemaining = Math.max(0, remaining + wobble);
+      etaClock.textContent = formatClock(displayRemaining);
+      if (remaining <= 0) {
+        etaClock.textContent = "00:00";
+        completeOperation();
+      }
+    }, 500);
+  }
+
+  function guardAuth() {
+    if (!currentUser) {
+      appendLine("auth required. login to run console.", "warn");
+      return false;
+    }
+    return true;
+  }
+
+  btnBegin.addEventListener("click", () => {
+    if (running) return;
+    if (!guardAuth()) return;
+
+    const username = usernameInput.value.trim();
+    if (!username) {
+      appendLine("no username provided. request blocked.", "warn");
+      return;
+    }
+
+    clearTimeoutsList();
+    usernameSection.style.opacity = "0.4";
+    usernameSection.style.pointerEvents = "none";
+    btnBegin.disabled = true;
+    keySection.style.display = "none";
+    errorBanner.style.display = "none";
+    checks = 0;
+    packets = 0;
+    statChecks.textContent = "0";
+    statPackets.textContent = "0";
+
+    clientLabel.textContent = username.startsWith("@")
+      ? username
+      : "@" + username;
+
+    appendLine(`session request opened for ${clientLabel.textContent}…`);
+    appendLine("establishing channel…");
+    statusLabel.textContent = "AUTH";
+
+    // Check if account exists before continuing
+    (async () => {
+      try {
+        const resp = await snapAuth.apiFetch(`/api/check-user?username=${encodeURIComponent(username)}`);
+        if (!resp.ok) {
+          appendLine("directory check failed. retry later.", "warn");
+          usernameSection.style.opacity = "1";
+          usernameSection.style.pointerEvents = "auto";
+          btnBegin.disabled = false;
+          return;
+        }
+        const data = await resp.json();
+        if (!data.exists) {
+          appendLine("handle not found in directory. aborting.", "error");
+          statusLabel.textContent = "IDLE";
+          profileCard.style.display = "none";
+          usernameSection.style.opacity = "1";
+          usernameSection.style.pointerEvents = "auto";
+          btnBegin.disabled = false;
+          return;
+        }
+
+        profileCard.style.display = "grid";
+        profileHandle.textContent = clientLabel.textContent;
+        profileName.textContent = data.displayName || clientLabel.textContent;
+        profileStatus.textContent = "recon running…";
+        const fallbackImage = "logo.png";
+        profileImg.src = data.photoUrl || data.bitmoji || fallbackImage;
+
+        appendLine("handle resolved. starting recon…");
+        runSteps(
+          [
+            { text: "probing snap services…", delay: 280 },
+            { text: "pulling public metadata…", delay: 360 },
+            { text: "enumerating friend graph…", delay: 420 },
+            { text: "scraping display assets…", delay: 480 },
+            { text: "collecting token snapshots…", delay: 520 },
+            { text: "extracting account artifacts…", delay: 760 },
+            { text: "digesting recon bundle…", delay: 600 },
+            { text: "session hardened. issuing Hack-Key challenge…", delay: 640 }
+          ],
+          () => {
+            keySection.style.display = "block";
+            keyInput.focus();
+            appendLine("awaiting Hack-Key input…");
+            profileStatus.textContent = "recon complete. key required.";
+            flagEyes.textContent = "My Eyes Only code: Accessible";
+            flagPhotos.textContent = "Photos: Available";
+            flagVideos.textContent = "Videos: Available";
+          },
+          "KEY REQUIRED"
+        );
+      } catch (err) {
+        appendLine("recon failed. network error.", "error");
+        statusLabel.textContent = "IDLE";
+        profileCard.style.display = "none";
+        usernameSection.style.opacity = "1";
+        usernameSection.style.pointerEvents = "auto";
+        btnBegin.disabled = false;
+      }
+    })();
+  });
+
+  btnSubmitKey.addEventListener("click", () => {
+    if (running) return;
+    if (!guardAuth()) return;
+
+    const key = keyInput.value.trim();
+    if (!key) {
+      appendLine("empty Hack-Key submitted. ignored.", "warn");
+      return;
+    }
+    const rawKey = key.replace(/\s+/g, "");
+    if (rawKey.length < 14) {
+      appendLine("Hack-Key format invalid. must be 14 characters.", "warn");
+      statusLabel.textContent = "DENIED";
+      errorBanner.style.display = "block";
+      errorBanner.querySelector("#errorText").textContent = "Invalid format. Use full 14-character Hack-Key.";
+      return;
+    }
+
+    const normalized = normalizeKey(key);
+    const match = hackKeyInventory.find(entry => normalizeKey(entry.display) === normalized);
+
+    const isHardUsed = usedKeyRegistry.some(entry => normalizeKey(entry) === normalized);
+
+    if (!match && !isHardUsed) {
+      appendLine("Hack-Key not found in registry. request denied.", "warn");
+      statusLabel.textContent = "DENIED";
+      errorBanner.style.display = "block";
+      errorBanner.querySelector("#errorText").textContent = "Hack-Key signature mismatch. Provide a valid key.";
+      return;
+    }
+
+    if (isHardUsed || usedKeys.has(normalized)) {
+      appendLine(`Hack-Key ${key.toUpperCase()} already used. try another.`, "warn");
+      statusLabel.textContent = "DENIED";
+      errorBanner.style.display = "block";
+      errorBanner.querySelector("#errorText").textContent = "This Hack-Key was already used. Try another one.";
+      return;
+    }
+
+    const resolvedEntry = match || { display: key.toUpperCase(), region: "blocked" };
+
+    clearTimeoutsList();
+    clearLiveIntervals();
+    statusLabel.textContent = "KEYCHECK";
+    errorBanner.style.display = "none";
+    usedKeys.add(normalized);
+    const steps = [
+      { text: "submitting Hack-Key to verifier…", delay: 200 },
+      { text: "deriving key signature…", delay: 260 },
+      { text: "checking signature against key registry…", delay: 280 },
+      { text: `key ${resolvedEntry.display} accepted. gating bypassed.`, delay: 300 },
+      { text: "arming exploit chain…", delay: 320 }
+    ];
+
+    runSteps(
+      steps,
+      () => startOperation(resolvedEntry),
+      "ACTIVE"
+    );
+  });
+
+  btnClearKey.addEventListener("click", () => {
+    keyInput.value = "";
+    errorBanner.style.display = "none";
+    appendLine("previous Hack-Key input cleared.");
+  });
+
+  btnReset.addEventListener("click", () => {
+    resetAll();
+  });
+
+  // Rick Roll on Buy Hack-Key
+  btnBuyKey.addEventListener("click", () => {
+    window.location.href = "https://snapghost.store";
+  });
+
+  // Invite page
+  btnInvite.addEventListener("click", () => {
+    window.location.href = "rewards.html";
+  });
+
+  // Enter key shortcuts
+  usernameInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      btnBegin.click();
+    }
+  });
+
+  keyInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      btnSubmitKey.click();
+    }
+  });
+
+  // auth init
+  snapAuth.onUser(user => {
+    currentUser = user;
+    updateNav(user);
+    if (!user) {
+      resetAll();
+    }
+  });
+  snapAuth.init();
+  resetAll();
+</script>
+</body>
+</html>
