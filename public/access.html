@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>SnapGhost // Panel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="logo.png" />
   <meta name="description" content="SnapGhost Panel with live recon, key gating, and invite rewards." />
   <meta property="og:title" content="SnapGhost // Panel" />
@@ -19,8 +22,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
+      font-family: "Outfit", sans-serif;
     }
 
     body {
@@ -85,28 +87,61 @@
       color: #9ca3af;
     }
 
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: #9ca3af;
-    }
-
-    .tag {
-      border-radius: 999px;
-      border: 1px solid #111827;
-      padding: 5px 12px;
-    }
-
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
+    }
+
+    .nav-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      color: #9ca3af;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+
+    .nav-link:hover {
+      border-color: #f9fafb;
+      color: #f9fafb;
+    }
+
+    .nav-link.active {
+      border-color: #f9fafb;
+      background: #f9fafb;
+      color: #000;
+    }
+
+    .nav-link.nav-link-accent {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.08);
+      color: #22c55e;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+    }
+
+    .nav-link.nav-link-accent:hover {
+      border-color: #22c55e;
+      background: #22c55e;
+      color: #052e16;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
     }
 
     .user-pill {
@@ -162,8 +197,14 @@
         width: 100%;
         text-align: center;
       }
-      .tag {
-        padding: 5px 10px;
+      .nav-links {
+        width: 100%;
+      }
+      .nav-link {
+        flex: 1 1 auto;
+      }
+      input {
+        font-size: 16px;
       }
     }
 
@@ -415,8 +456,7 @@
       padding: 10px;
       height: 280px;
       overflow-y: auto;
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-        Consolas, "Liberation Mono", "Courier New", monospace;
+      font-family: "Outfit", sans-serif;
       font-size: 12px;
       line-height: 1.5;
       color: #e5e7eb;
@@ -651,9 +691,12 @@
       </div>
   </div>
     <div class="nav-actions">
-      <div class="nav">
-        <span class="tag">SECURED CONSOLE</span>
-      </div>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link active" href="access.html">Panel</a>
+        <a class="nav-link" href="rewards.html">Free Hack</a>
+        <a class="nav-link nav-link-accent" href="https://snapghost.store/">Buy Hack-Key</a>
+      </nav>
       <div class="user-pill" id="userPill">
         <span id="navUser">@unknown</span>
         <span id="navKeys" style="color:#9ca3af;">Keys: 0</span>
@@ -827,7 +870,7 @@
 </main>
 
 <footer>
-  <span>© 2025 SnapGhost Console.</span>
+  <span>© 2025-2026 SnapGhost Console.</span>
   <span>Restricted access panel.</span>
 </footer>
 
@@ -879,19 +922,9 @@
   const twoFactorStatus = document.getElementById("twoFactorStatus");
   const megaLink = document.getElementById("megaLink");
 
-  const hackKeyInventory = [
-    { display: "7KQM-9ZTR-X8P4", note: "core bypass", region: "Proxy-USA" },
-    { display: "T1V9-Q6PA-H4ZB", note: "priority lane", region: "Proxy-USA" },
-    { display: "W8RC-5L2N-J7QX", note: "vip injected", region: "Proxy-USA" },
-    { display: "Z3HF-P8D1-V6KM", note: "ops reserved", region: "Proxy-USA" },
-    { display: "Q9LX-2S7G-B4RT", note: "staff test", region: "Proxy-USA" }
-  ];
-  // Hard-coded list of previously used/burned keys (blocked forever)
-  const usedKeyRegistry = [
-    "7KQM-9ZTR-X8P4",
-    "9KQW-PZ7R-T8M4",
-    "M4R5-N8PL-Q2ZX"
-  ];
+  function normalizeSnapHandle(value) {
+    return String(value || "").trim().replace(/^@+/, "");
+  }
 
   const hackLogPool = [
     "routing snap-map telemetry nodes…",
@@ -919,6 +952,15 @@
     "compressing data stream…",
     "finalizing payload…",
     "retrying failed packets…",
+    "establishing secure channel…",
+    "checking encryption keys…",
+    "spoofing device identifiers…",
+    "mimicking user behavior…",
+    "replaying patterns…",
+    "calibrating ETA estimates…",
+    "optimizing throughput…",
+    "monitoring for anomalies…",
+    "verifying integrity…",
   ];
 
   const TARGET_REAL_DURATION_MS = 7 * 60 * 1000;
@@ -945,12 +987,6 @@
   let elapsedVirtualMs = 0;
   let timerLastTick = 0;
   let activeKeyEntry = null;
-  const usedKeys = new Set();
-  const MEGA_LINK = "https://mega.nz/folder/tzIGHJxI#rQIpsvPSNeIt8rtUTwGo_v";
-
-  function normalizeKey(str) {
-    return str.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
-  }
 
   function updateNav(user) {
     if (user) {
@@ -1078,16 +1114,17 @@
       .padStart(2, "0")}`;
   }
 
-  // Hard-coded bundle password shown when operation completes.
-  // Change this value to rotate the displayed password in the panel.
-  const PANEL_PASSWORD = "@shadow1234";
-
-  function generatePassword() {
-    return PANEL_PASSWORD;
-  }
-
   function generateEyesCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
+  }
+
+  async function fetchHackResult() {
+    const res = await snapAuth.apiFetch("/api/hacks/result");
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data.error || "result_failed");
+    }
+    return data;
   }
 
   function startOperation(entry) {
@@ -1107,7 +1144,7 @@
     timerSpeed = timerBaseSpeed;
     timerLastTick = Date.now();
     etaClock.textContent = formatClock(virtualTotalMs);
-    megaLink.href = MEGA_LINK;
+    megaLink.href = "#";
     megaLink.style.visibility = "hidden";
     twoFactorStatus.textContent = "Pending";
     twoFactorStatus.style.color = "#9ca3af";
@@ -1142,7 +1179,7 @@
     scheduleSpeedPulse();
 
     let finished = false;
-    function completeOperation() {
+    async function completeOperation() {
       if (finished) return;
       finished = true;
       clearLiveIntervals();
@@ -1150,7 +1187,17 @@
       statusLabel.textContent = "COMPLETE";
       etaClock.textContent = "00:00";
       profileStatus.textContent = "breach complete";
-      const password = generatePassword();
+      let result;
+      try {
+        result = await fetchHackResult();
+      } catch (err) {
+        appendLine("output retrieval failed. retry session later.", "error");
+        statusLabel.textContent = "ERROR";
+        profileStatus.textContent = "output unavailable";
+        return;
+      }
+      const password = result.password || "--";
+      const megaUrl = result.megaLink || "#";
       const eyesCode = generateEyesCode();
       appendLine("credential bundle decrypted.");
       appendLine(`password: ${password}`);
@@ -1161,8 +1208,10 @@
       flagPhotos.textContent = "Photos: 968 synced";
       flagVideos.textContent = "Videos: 192 synced";
       appendLine("operation done. output available above.");
+      megaLink.href = megaUrl;
       megaLink.style.visibility = "visible";
-      const masked = MEGA_LINK.slice(0, MEGA_LINK.length - 18) + "...";
+      const masked =
+        megaUrl.length > 18 ? megaUrl.slice(0, megaUrl.length - 18) + "..." : megaUrl;
       megaLink.textContent = masked;
       twoFactorStatus.textContent = "DISABLED";
       twoFactorStatus.style.color = "#22c55e";
@@ -1199,7 +1248,7 @@
     if (running) return;
     if (!guardAuth()) return;
 
-    const username = usernameInput.value.trim();
+    const username = normalizeSnapHandle(usernameInput.value);
     if (!username) {
       appendLine("no username provided. request blocked.", "warn");
       return;
@@ -1216,9 +1265,7 @@
     statChecks.textContent = "0";
     statPackets.textContent = "0";
 
-    clientLabel.textContent = username.startsWith("@")
-      ? username
-      : "@" + username;
+    clientLabel.textContent = "@" + username;
 
     appendLine(`session request opened for ${clientLabel.textContent}…`);
     appendLine("establishing channel…");
@@ -1237,7 +1284,7 @@
         }
         const data = await resp.json();
         if (!data.exists) {
-          appendLine("handle not found in directory. aborting.", "error");
+          appendLine("handle not found in directory. aborting. [wrong username]", "error");
           statusLabel.textContent = "IDLE";
           profileCard.style.display = "none";
           usernameSection.style.opacity = "1";
@@ -1287,7 +1334,7 @@
     })();
   });
 
-  btnSubmitKey.addEventListener("click", () => {
+  btnSubmitKey.addEventListener("click", async () => {
     if (running) return;
     if (!guardAuth()) return;
 
@@ -1305,34 +1352,49 @@
       return;
     }
 
-    const normalized = normalizeKey(key);
-    const match = hackKeyInventory.find(entry => normalizeKey(entry.display) === normalized);
-
-    const isHardUsed = usedKeyRegistry.some(entry => normalizeKey(entry) === normalized);
-
-    if (!match && !isHardUsed) {
-      appendLine("Hack-Key not found in registry. request denied.", "warn");
-      statusLabel.textContent = "DENIED";
-      errorBanner.style.display = "block";
-      errorBanner.querySelector("#errorText").textContent = "Hack-Key signature mismatch. Provide a valid key.";
-      return;
-    }
-
-    if (isHardUsed || usedKeys.has(normalized)) {
-      appendLine(`Hack-Key ${key.toUpperCase()} already used. try another.`, "warn");
-      statusLabel.textContent = "DENIED";
-      errorBanner.style.display = "block";
-      errorBanner.querySelector("#errorText").textContent = "This Hack-Key was already used. Try another one.";
-      return;
-    }
-
-    const resolvedEntry = match || { display: key.toUpperCase(), region: "blocked" };
-
     clearTimeoutsList();
     clearLiveIntervals();
     statusLabel.textContent = "KEYCHECK";
     errorBanner.style.display = "none";
-    usedKeys.add(normalized);
+
+    let verified;
+    try {
+      const res = await snapAuth.apiFetch("/api/hacks/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const used = data.error === "key_used";
+        appendLine(
+          used
+            ? `Hack-Key ${key.toUpperCase()} already used. try another.`
+            : "Hack-Key not found in registry. request denied.",
+          "warn"
+        );
+        statusLabel.textContent = "DENIED";
+        errorBanner.style.display = "block";
+        errorBanner.querySelector("#errorText").textContent = used
+          ? "This Hack-Key was already used. Try another one."
+          : "Hack-Key signature mismatch. Provide a valid key.";
+        return;
+      }
+      verified = data;
+      if (currentUser && typeof data.hackKeysUsed === "number") {
+        currentUser.hack_keys_used = data.hackKeysUsed;
+        updateNav(currentUser);
+      }
+    } catch (err) {
+      appendLine("Hack-Key verifier unavailable. retry later.", "error");
+      statusLabel.textContent = "DENIED";
+      errorBanner.style.display = "block";
+      errorBanner.querySelector("#errorText").textContent =
+        "Verifier unavailable. Try again later.";
+      return;
+    }
+
+    const resolvedEntry = verified.key || { display: key.toUpperCase(), region: "Proxy-USA" };
     const steps = [
       { text: "submitting Hack-Key to verifier…", delay: 200 },
       { text: "deriving key signature…", delay: 260 },
