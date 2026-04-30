@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <title>SnapGhost // Invite Rewards</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="logo.png" />
   <meta name="description" content="Share SnapGhost invites and earn free hacks." />
   <meta property="og:title" content="SnapGhost // Invite Rewards" />
@@ -19,7 +22,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      font-family: "Outfit", sans-serif;
     }
 
     body {
@@ -78,22 +81,61 @@
       letter-spacing: 0.25em;
     }
 
-    .nav-tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: #9ca3af;
-      border: 1px solid #111827;
-      padding: 5px 12px;
-      border-radius: 999px;
-    }
-
     .nav-actions {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
+    }
+
+    .nav-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid #111827;
+      background: #020617;
+      color: #9ca3af;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      transition: 0.15s ease;
+    }
+
+    .nav-link:hover {
+      border-color: #f9fafb;
+      color: #f9fafb;
+    }
+
+    .nav-link.active {
+      border-color: #f9fafb;
+      background: #f9fafb;
+      color: #000;
+    }
+
+    .nav-link.nav-link-accent {
+      border-color: #22c55e;
+      background: rgba(34, 197, 94, 0.08);
+      color: #22c55e;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.2);
+    }
+
+    .nav-link.nav-link-accent:hover {
+      border-color: #22c55e;
+      background: #22c55e;
+      color: #052e16;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45);
     }
 
     .user-pill {
@@ -149,8 +191,14 @@
         width: 100%;
         text-align: center;
       }
-      .nav-tag {
-        padding: 5px 10px;
+      .nav-links {
+        width: 100%;
+      }
+      .nav-link {
+        flex: 1 1 auto;
+      }
+      .link-input {
+        font-size: 16px;
       }
     }
 
@@ -184,6 +232,11 @@
       font-size: 13px;
       color: #d1d5db;
       margin-bottom: 20px;
+    }
+
+    .invite-warning {
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     /* LINK ROW */
@@ -233,21 +286,63 @@
       transform: translateY(-1px);
     }
 
+    .reward-panel {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid #1f2937;
+      background: linear-gradient(180deg, #07111f 0%, #020617 100%);
+      box-shadow: 0 0 28px rgba(15, 23, 42, 0.8);
+    }
+
     .invite-rule {
-      margin-top: 4px;
-      font-size: 13px;
-      color: #e5e7eb;
-      margin-bottom: 10px;
+      margin: 0 0 14px;
+      font-size: 12px;
+      color: #fef9c3;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
     }
 
-    .invite-count {
-      font-size: 13px;
-      color: #d1d5db;
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
     }
 
-    .invite-count span {
-      font-weight: 600;
+    .reward-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 92px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid #162032;
+      background: rgba(2, 6, 23, 0.88);
+      text-align: center;
+    }
+
+    .reward-stat-label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 10px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .reward-stat-value {
+      display: block;
+      font-size: 26px;
+      font-weight: 700;
       color: #f9fafb;
+      line-height: 1;
+    }
+
+    @media (max-width: 560px) {
+      .reward-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
 
     footer {
@@ -273,7 +368,12 @@
     </div>
   </div>
   <div class="nav-actions">
-    <div class="nav-tag">INVITE</div>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="access.html">Panel</a>
+      <a class="nav-link active" href="rewards.html">Free Hack</a>
+      <a class="nav-link nav-link-accent" href="https://snapghost.store/">Buy Hack-Key</a>
+    </nav>
     <div class="user-pill" id="userPill">
       <span id="navUser">@unknown</span>
       <span id="navKeys" style="color:#9ca3af;">Keys: 0</span>
@@ -287,7 +387,11 @@
   <div class="invite-card">
     <h1 class="invite-title">Invite Rewards</h1>
     <p class="invite-subtitle">
-      Fake invites will be detected and your account will get locked.
+      <span class="invite-warning">Fake-Spammy invites will be detected and your account will get locked.</span>
+      <br><br>
+      Best places to get fast invites:
+      <br>1. REDDIT
+      <br>2. TWITTER (X)
       <br><br><strong>Your Invite Link:</strong>
     </p>
 
@@ -301,13 +405,24 @@
       <button id="copyBtn" class="copy-btn">Copy</button>
     </div>
 
-    <p class="invite-rule"><strong>15 Invites = 1 Free Hack</strong></p>
-    <p class="invite-count">Your Current Invites = <span id="inviteCount">0</span></p>
+    <section class="reward-panel" aria-label="Invite rewards">
+      <p class="invite-rule"><strong>15 Invites = 1 Free Hack-Key</strong></p>
+      <div class="reward-grid">
+        <div class="reward-stat">
+          <span class="reward-stat-label">Current Invites</span>
+          <span class="reward-stat-value" id="inviteCount">0</span>
+        </div>
+        <div class="reward-stat">
+          <span class="reward-stat-label">Hack-Keys Redeemed</span>
+          <span class="reward-stat-value" id="hackKeysRedeemed">0</span>
+        </div>
+      </div>
+    </section>
   </div>
 </main>
 
 <footer>
-  <span>© 2025 SnapGhost Suite.</span>
+  <span>© 2025-2026 SnapGhost Suite.</span>
   <span>Invite Rewards Panel.</span>
 </footer>
 
@@ -319,6 +434,7 @@
   const copyBtn = document.getElementById("copyBtn");
   const inviteInput = document.getElementById("inviteLink");
   const inviteCount = document.getElementById("inviteCount");
+  const hackKeysRedeemed = document.getElementById("hackKeysRedeemed");
   const navUser = document.getElementById("navUser");
   const navKeys = document.getElementById("navKeys");
   const navInvites = document.getElementById("navInvites");
@@ -341,12 +457,14 @@
     if (user) {
       navUser.textContent = "@" + user.username;
       navKeys.textContent = "Keys: " + (user.hack_keys_used || 0);
+      hackKeysRedeemed.textContent = user.hack_keys_used || 0;
       navInvites.textContent = "Invites: " + (user.invites_count || 0);
       userPill.style.borderColor = "#f9fafb";
       logoutBtn.style.display = "inline-flex";
     } else {
       navUser.textContent = "Login required";
       navKeys.textContent = "";
+      hackKeysRedeemed.textContent = "0";
       navInvites.textContent = "";
       userPill.style.borderColor = "#111827";
       logoutBtn.style.display = "none";

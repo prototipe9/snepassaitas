@@ -4,11 +4,14 @@
   const isLocalHost =
     window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1";
-  const API_BASE =
-    configuredApiBase ||
-    (isLocalHost
+  const localApiBase =
+    window.location.port === "3000"
       ? window.location.origin
-      : `${window.location.protocol}//api.${baseHostname}`);
+      : `${window.location.protocol}//${window.location.hostname}:3000`;
+  const API_BASE =
+    isLocalHost
+      ? localApiBase
+      : configuredApiBase || `${window.location.protocol}//api.${baseHostname}`;
 
   const state = {
     user: null,
@@ -40,6 +43,13 @@
   if (!incomingInvite && pathParts[0] === "invite" && pathParts[1]) {
     localStorage.setItem("snap_invite_code", pathParts[1]);
   }
+  if (
+    !incomingInvite &&
+    pathParts.length === 1 &&
+    /^[a-f0-9]{12}$/i.test(pathParts[0])
+  ) {
+    localStorage.setItem("snap_invite_code", pathParts[0]);
+  }
 
   function storedInviteCode() {
     return localStorage.getItem("snap_invite_code") || "";
@@ -52,7 +62,42 @@
 
   function setUser(user) {
     state.user = user;
+    document.body.classList.toggle("auth-locked", !user);
+    updateInviteLockBanner(user);
     state.listeners.forEach(cb => cb(user));
+  }
+
+  function updateInviteLockBanner(user) {
+    let banner = document.getElementById("invite-lock-banner");
+    if (!banner) {
+      banner = document.createElement("div");
+      banner.id = "invite-lock-banner";
+      banner.className = "invite-lock-banner";
+      banner.textContent =
+        "Account locked: Fake-Spammed invites detected. Contact support for a manual check to unlock.";
+    }
+
+    const header = document.querySelector("header");
+    if (header && header.parentNode) {
+      header.parentNode.insertBefore(banner, header.nextSibling);
+      syncInviteLockBannerPosition();
+    } else {
+      document.body.prepend(banner);
+    }
+
+    const invites = Number(user?.invites_count || 0);
+    const locked = invites >= 14;
+    document.body.classList.toggle("invite-lock-active", locked);
+    banner.style.display = locked ? "flex" : "none";
+  }
+
+  function syncInviteLockBannerPosition() {
+    const header = document.querySelector("header");
+    if (!header) return;
+    document.documentElement.style.setProperty(
+      "--snap-header-height",
+      `${Math.ceil(header.getBoundingClientRect().height)}px`
+    );
   }
 
   function injectStyles() {
@@ -212,8 +257,51 @@
         height: 50px;
         display: block;
       }
+      body > header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+      }
+      body > header .nav-actions {
+        position: relative;
+        z-index: 1001;
+      }
+      body.auth-locked > header {
+        display: none !important;
+      }
+      @media (max-width: 640px) {
+        .auth-form input {
+          font-size: 16px;
+        }
+      }
+      .invite-lock-banner {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: var(--snap-header-height, 0px);
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 10px 16px;
+        border-top: 1px solid #7f1d1d;
+        border-bottom: 1px solid #7f1d1d;
+        background: #450a0a;
+        color: #fecaca;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.35;
+        text-align: center;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        z-index: 999;
+      }
+      body.invite-lock-active {
+        scroll-padding-top: calc(var(--snap-header-height, 0px) + 40px);
+      }
     `;
     document.head.appendChild(style);
+    window.addEventListener("resize", syncInviteLockBannerPosition);
   }
 
   function buildOverlay() {
@@ -238,15 +326,15 @@
         <div class="auth-form" id="authForm">
           <div class="form-group">
             <label for="authUsername">Username</label>
-            <input id="authUsername" type="text" placeholder="@user" autocomplete="username">
+            <input id="authUsername" type="text" placeholder="Username" autocomplete="username">
           </div>
           <div class="form-group">
             <label for="authPassword">Password</label>
-            <input id="authPassword" type="password" placeholder="••••" autocomplete="current-password">
+            <input id="authPassword" type="password" placeholder="••••••••" autocomplete="current-password">
           </div>
           <div class="form-group" id="confirmRow" style="display:none;">
             <label for="authPassword2">Confirm Password</label>
-            <input id="authPassword2" type="password" placeholder="••••" autocomplete="new-password">
+            <input id="authPassword2" type="password" placeholder="••••••••" autocomplete="new-password">
           </div>
           <div class="form-group">
             <label>Captcha</label>
@@ -379,6 +467,14 @@
           const msg =
             data.error === "username_taken"
               ? "Username already exists."
+              : data.error === "invalid_username"
+              ? "Username must be 4-15 letters or numbers."
+              : data.error === "username_too_short"
+              ? "Username must be at least 4 characters."
+              : data.error === "password_too_short"
+              ? "Password must be at least 6 characters."
+              : data.error === "password_same_as_username"
+              ? "Password cannot be the same as username."
               : data.error === "invalid_credentials"
               ? "Invalid credentials."
               : data.error === "too_many_attempts"
@@ -431,6 +527,7 @@
   async function init(onReady) {
     injectStyles();
     buildOverlay();
+    document.body.classList.add("auth-locked");
     const overlay = document.getElementById("auth-overlay");
     const current = await fetchMe();
     if (current) {
