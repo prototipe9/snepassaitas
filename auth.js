@@ -86,7 +86,7 @@
     }
 
     const invites = Number(user?.invites_count || 0);
-    const locked = invites >= 14;
+    const locked = !user?.invite_lock_exempt && invites >= 14;
     document.body.classList.toggle("invite-lock-active", locked);
     banner.style.display = locked ? "flex" : "none";
   }
