@@ -435,6 +435,33 @@
         return;
       }
 
+      if (mode === "register" && username.length < 4) {
+        errorBox.textContent = "Username must be at least 4 characters.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if (mode === "register" && !/^[A-Za-z0-9]{4,15}$/.test(username)) {
+        errorBox.textContent = "Username must be 4-15 letters or numbers.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if (mode === "register" && password.length < 6) {
+        errorBox.textContent = "Password must be at least 6 characters.";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      if (
+        mode === "register" &&
+        password.trim().toLowerCase() === username.toLowerCase()
+      ) {
+        errorBox.textContent = "Password cannot be the same as username.";
+        errorBox.style.display = "block";
+        return;
+      }
+
       if (mode === "register" && password !== password2) {
         errorBox.textContent = "Passwords do not match.";
         errorBox.style.display = "block";
